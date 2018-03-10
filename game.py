@@ -289,7 +289,8 @@ class Player:
 
     def read_position(self):
         coord = input()
-        x, y = ascii_uppercase.index(coord[0]), int(coord[1]) - 1
+        x, y = ascii_uppercase.index(coord[0].upper()), int(coord[1:]) - 1
+        assert x in range(10) and y in range(10), "Wrong params"
         return x, y
 
 
@@ -331,17 +332,25 @@ if __name__ == '__main__':
         print('This is your Field')
         print(game.field_with_ships(0))
         print('Player {}, enter move: '.format(player))
-        x, y = game.read_position(player - 1)
-        game.ret_field()[0].shoot_at((x, y))
-        print(game.field_without_ships(0))
-        if game.end_of_the_game(game.ret_field()[0].ret_field()):
-            print('Player 2 WON!!! UHUUUUUU')
+        try:
+            x, y = game.read_position(player - 1)
+            game.ret_field()[0].shoot_at((x, y))
+            print(game.field_without_ships(0))
+            if game.end_of_the_game(game.ret_field()[0].ret_field()):
+                print('Player 2 WON!!! UHUUUUUU')
+        except AssertionError as err:
+            # print('You entered wrong parameters!!!\n' + ' You will miss your turn')
+            print(err)
         player = 2
         print('This is your Field')
         print(game.field_with_ships(1))
         print('Player {}, enter move: '.format(player))
-        x, y = game.read_position(player - 1)
-        game.ret_field()[1].shoot_at((x, y))
-        print(game.field_without_ships(1))
+        try:
+            x, y = game.read_position(player - 1)
+            game.ret_field()[1].shoot_at((x, y))
+            print(game.field_without_ships(1))
+        except AssertionError as err:
+            print(err)
+            # print('You entered wrong parameters!!!\n' + ' You will miss your turn')
         if game.end_of_the_game(game.ret_field()[1].ret_field()):
             print('Player 2 WON!!! UHUUUUUU')
